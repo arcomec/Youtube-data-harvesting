@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as pd  # You may need other libraries for YouTube API requests
+from googleapiclient.discovery import build
 
 def main():
     st.title("YouTube Channel Migration Tool")
@@ -9,10 +9,30 @@ def main():
 
     if st.button("Get Channel Details"):
         if channel_id:
-            # Add code here to fetch channel details using the YouTube API
-            # Display channel details using st.write()
-            st.write(f"Channel ID: {channel_id}")
-            st.write("Add other channel details here")
+            # Set your API key
+            api_key = "YOUR_YOUTUBE_API_KEY_HERE"  # Replace with your actual API key
+
+            # Create a service object
+            youtube = build("youtube", "v3", developerKey=api_key)
+
+            try:
+                # Make a request to the YouTube Data API
+                request = youtube.channels().list(
+                    part="snippet,contentDetails,statistics",
+                    id=channel_id  # Use the user-input channel_id
+                )
+                response = request.execute()
+
+                # Display channel details using st.write()
+                if 'items' in response and response['items']:
+                    channel_title = response['items'][0]['snippet']['title']
+                    st.write(f"Channel Title: {channel_title}")
+                    # Display other channel details as needed
+                else:
+                    st.warning("Channel details not found.")
+
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
 
         else:
             st.warning("Please enter a YouTube Channel ID")
