@@ -10,7 +10,7 @@ def main():
     if st.button("Get Channel Details"):
         if channel_id:
             # Set your API key
-            api_key = "YOUR_YOUTUBE_API_KEY_HERE"  # Replace with your actual API key
+            api_key = "AIzaSyBZxXHtLkIraQoRHhYITbbexm5mAv7rGCE"  # Replace with your actual API key
 
             # Create a service object
             youtube = build("youtube", "v3", developerKey=api_key)
